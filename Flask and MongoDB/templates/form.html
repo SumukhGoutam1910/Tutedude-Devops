@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Submit Data</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .error { color: #b00020; margin-bottom: 1em; }
+    .field { margin-bottom: 0.75em; }
+  </style>
+</head>
+<body>
+  <h1>Submit</h1>
+
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('submit') }}">
+    <div class="field">
+      <label for="name">Name</label><br />
+      <input type="text" id="name" name="name" value="{{ form_data.get('name','') }}" />
+    </div>
+    <div class="field">
+      <label for="email">Email</label><br />
+      <input type="email" id="email" name="email" value="{{ form_data.get('email','') }}" />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
