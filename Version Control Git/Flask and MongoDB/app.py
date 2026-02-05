@@ -99,6 +99,40 @@ def submit():
         return render_template('form.html', error=str(e), form_data={'name': name, 'email': email})
 
 
+@app.route('/submittodoitem', methods=['POST'])
+def submittodoitem():
+    """Accept `itemName` and `itemDescription` via POST and store in MongoDB.
+
+    Supports JSON (`application/json`) or form-encoded POSTs. Returns JSON response.
+    """
+    try:
+        # accept JSON or form data
+        if request.is_json:
+            data = request.get_json()
+            item_name = data.get('itemName')
+            item_description = data.get('itemDescription')
+        else:
+            item_name = request.form.get('itemName') or request.form.get('itemname')
+            item_description = request.form.get('itemDescription') or request.form.get('itemdescription')
+
+        if not item_name:
+            return jsonify({'error': 'itemName is required'}), 400
+
+        client = MongoClient(MONGO_URI)
+        try:
+            db = client.get_default_database()
+        except Exception:
+            db = client['test']
+
+        coll = db['todoitems']
+        doc = {'itemName': item_name, 'itemDescription': item_description}
+        coll.insert_one(doc)
+        client.close()
+        return jsonify({'status': 'ok'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/success', methods=['GET'])
 def success():
     return render_template('success.html')
