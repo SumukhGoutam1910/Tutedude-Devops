@@ -1,0 +1,5 @@
+Flask>=2.0
+pymongo>=4.0
+python-dotenv>=0.20.0
+# dnspython may be required if your MongoDB URI uses mongodb+srv://
+# dnspython>=2.0
