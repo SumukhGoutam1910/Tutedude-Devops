@@ -16,6 +16,10 @@
 
   <form id="todoForm">
     <div class="field">
+      <label for="itemId">Item ID</label><br />
+      <input type="text" id="itemId" name="itemId" />
+    </div>
+    <div class="field">
       <label for="itemName">Item Name</label><br />
       <input type="text" id="itemName" name="itemName" />
     </div>
@@ -35,6 +39,7 @@
       e.preventDefault();
       msg.textContent = '';
       const payload = {
+        itemId: document.getElementById('itemId').value,
         itemName: document.getElementById('itemName').value,
         itemDescription: document.getElementById('itemDescription').value
       };
