@@ -55,6 +55,15 @@ def index():
     return render_template('form.html', error=None, form_data={})
 
 
+@app.route('/todo', methods=['GET'])
+def todo_page():
+    """Render the To-Do page (frontend only). The form posts to `/submittodoitem`.
+
+    The backend route is implemented on the `master_2` branch.
+    """
+    return render_template('todo.html')
+
+
 @app.route('/submit', methods=['POST'])
 def submit():
     """Handle form submission and insert into MongoDB Atlas.

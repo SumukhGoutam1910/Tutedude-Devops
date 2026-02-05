@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>To-Do</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .field { margin-bottom: 0.75em; }
+    .success { color: green; }
+    .error { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>Add To-Do Item</h1>
+  <div id="message"></div>
+
+  <form id="todoForm">
+    <div class="field">
+      <label for="itemName">Item Name</label><br />
+      <input type="text" id="itemName" name="itemName" />
+    </div>
+    <div class="field">
+      <label for="itemDescription">Item Description</label><br />
+      <textarea id="itemDescription" name="itemDescription" rows="4" cols="40"></textarea>
+    </div>
+    <button type="submit">Add Item</button>
+  </form>
+
+  <p><a href="/">Back to submit page</a></p>
+
+  <script>
+    const form = document.getElementById('todoForm');
+    const msg = document.getElementById('message');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = '';
+      const payload = {
+        itemName: document.getElementById('itemName').value,
+        itemDescription: document.getElementById('itemDescription').value
+      };
+
+      try {
+        const res = await fetch('/submittodoitem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.textContent = 'Item saved.';
+          msg.className = 'success';
+          form.reset();
+        } else {
+          msg.textContent = data.error || 'Error saving item';
+          msg.className = 'error';
+        }
+      } catch (err) {
+        msg.textContent = err.message || 'Network error';
+        msg.className = 'error';
+      }
+    });
+  </script>
+</body>
+</html>
